@@ -26,19 +26,11 @@ void         bottomOfStack(StackNodePtr topPtr);
 void         printStack(StackNodePtr topPtr);
 void         searchOfStack(StackNodePtr topPtr, const char *key);
 void         instructions(void);
+int          isDuplicate(StackNodePtr topPtr, const char *id);
+int          isDuplicateTicket(StackNodePtr topPtr, unsigned int ticket);
 
 // Add node to top of stack
 StackNodePtr push(StackNodePtr topPtr, const char *id, unsigned int ticket, char gender) {
-    // Reject duplicate passenger IDs
-    StackNodePtr scanPtr = topPtr;
-    while (scanPtr != NULL) {
-        if (strcmp(scanPtr->passengerId, id) == 0) {
-            printf("Passenger ID %s already exists. Duplicate IDs are not allowed.\n", id);
-            return topPtr;
-        }
-        scanPtr = scanPtr->nextPtr;
-    }
-
     StackNodePtr newPtr = (StackNodePtr)malloc(sizeof(StackNode));
 
     if (newPtr != NULL) {
@@ -48,9 +40,9 @@ StackNodePtr push(StackNodePtr topPtr, const char *id, unsigned int ticket, char
         newPtr->passengerGender = gender;
         newPtr->nextPtr = topPtr;
         topPtr = newPtr;
-        printf("Passenger %s is boarding the train.\n", newPtr->passengerId);
+        printf("Passenger %s is boarding the train.\n", newPtr->passengerId); // print the passenger being pushed into stack (boarding the train)
     } else {
-        printf("Passenger %s not pushed. No memory available.\n", id);
+        printf("Passenger %s not pushed. No memory available.\n", id); // if no memory available
     }
 
     return topPtr;
@@ -139,14 +131,39 @@ void searchOfStack(StackNodePtr topPtr, const char *key) {
     }
 }
 
+// Returns 1 if ticket number already exists in stack, 0 otherwise
+int isDuplicateTicket(StackNodePtr topPtr, unsigned int ticket) {
+    StackNodePtr currentPtr = topPtr;
+
+    while (currentPtr != NULL) {
+        if (currentPtr->ticketNumber == ticket) {
+            return 1;   /* found a match — duplicate! */
+        }
+        currentPtr = currentPtr->nextPtr;
+    }
+    return 0;   /* no match found */
+}
+
+// Returns 1 if ID already exists in stack, 0 otherwise
+int isDuplicate(StackNodePtr topPtr, const char *id) {
+    StackNodePtr currentPtr = topPtr;
+
+    while (currentPtr != NULL) {
+        if (strcmp(currentPtr->passengerId, id) == 0) {
+            return 1;   /* found a match — duplicate! */
+        }
+        currentPtr = currentPtr->nextPtr;
+    }
+    return 0;   /* no match found */
+}
+
 // Print menu options
 void instructions(void) {
-    printf("\nSTACK OPERATIONS\n");
     printf("Enter choice:\n");
-    printf("1) Print the last to board (top-of-stack)\n");
-    printf("2) Print the first to board (bottom-of-stack)\n");
-    printf("3) Board passenger (push)\n");
-    printf("4) Exit passenger (pop)\n");
+    printf("1) Print the last to board\n");
+    printf("2) Print the first to board\n");
+    printf("3) Board passenger\n");
+    printf("4) Exit passenger\n");
     printf("5) Print all passengers on train\n");
     printf("6) Search passengers\n");
     printf("7) Exit Application\n");

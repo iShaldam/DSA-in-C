@@ -1,13 +1,13 @@
 /* Group 2 - Passengers on a Train
-	In your team of 2-3 persons, review, discuss and implement the following problem specification for a chosen domain.
+   Lab-Quiz-3: Queue Implementation
 */
 
-// include stack header-file
-#include "quizStack.h"
+#include "quizQueue.h"
 
 int main(void) {
 
-    StackNodePtr stackPtr = NULL;   /* create stack pointer */
+    QueueNodePtr headPtr = NULL;    /* pointer to front of queue */
+    QueueNodePtr tailPtr = NULL;    /* pointer to back of queue */
 
     unsigned int choice;
     char inputBuf[10];              /* buffer for reading menu choice via fgets */
@@ -15,21 +15,27 @@ int main(void) {
     instructions();
     printf("? ");
     fgets(inputBuf, sizeof(inputBuf), stdin);
-    choice = (int)strtol(inputBuf, NULL, 10);
+    choice = (unsigned int)strtoul(inputBuf, NULL, 10);
 
     while (choice != 7) {
         switch (choice) {
-            case 1:
-                if (!isEmpty(stackPtr)) {
-                    topOfStack(stackPtr);   /* print node at the top of the stack */
+            case 1:                                         /* front of queue */
+                if (!isEmpty(headPtr)) {
+                    front(headPtr);
                 } else {
-                    puts("There are no passengers on board.");
+                    puts("No passengers on board.");
                 }
                 break;
-            case 2:
-                bottomOfStack(stackPtr);   /* print node at the bottom of the stack */
+
+            case 2:                                         /* back of queue */
+                if (!isEmpty(headPtr)) {
+                    back(tailPtr);
+                } else {
+                    puts("No passengers on board.");
+                }
                 break;
-            case 3: {
+
+            case 3: {                                       /* enqueue */
                 char         id[20];
                 char         ticketBuf[20];
                 char         genderBuf[5];
@@ -42,9 +48,14 @@ int main(void) {
                         printf("Input error. Enter Passenger ID: ");
                         continue;
                     }
-                    id[strcspn(id, "\n")] = '\0';   /* remove newline left by fgets */
+                    if (id[strlen(id) - 1] == '\n')
+                        id[strlen(id) - 1] = '\0';          /* remove newline left by fgets */
                     if (strlen(id) == 0) {
                         printf("Passenger ID cannot be empty. Enter Passenger ID: ");
+                        continue;
+                    }
+                    if (isDuplicate(headPtr, id)) {
+                        printf("Passenger ID %s already exists. Enter a different ID: ", id);
                         continue;
                     }
                     break;
@@ -62,19 +73,21 @@ int main(void) {
                         printf("Invalid input. Enter a valid Ticket Number: ");
                         continue;
                     }
+                    if (isDuplicateTicket(headPtr, ticket)) {
+                        printf("Ticket Number %u already exists. Enter a different Ticket Number: ", ticket);
+                        continue;
+                    }
                     break;
                 }
 
-                /* Robust gender input: only accept M or F (case-insensitive), loop until valid */
                 while (1) {
                     printf("Enter Gender (M/F): ");
                     if (!fgets(genderBuf, sizeof(genderBuf), stdin)) {
                         printf("Input error.");
                         continue;
                     }
-
-                    // Remove any newline from input
-                    genderBuf[strcspn(genderBuf, "\n")] = '\0';
+                    if (genderBuf[strlen(genderBuf) - 1] == '\n')
+                        genderBuf[strlen(genderBuf) - 1] = '\0'; /* remove newline left by fgets */
 
                     if (genderBuf[0] == 'M' || genderBuf[0] == 'm') {
                         gender = 'M';
@@ -87,49 +100,56 @@ int main(void) {
                     }
                 }
 
-                stackPtr = push(stackPtr, id, ticket, gender);  /* push node onto stack */
-                printStack(stackPtr);                           /* print the stack nodes */
+                enqueue(&headPtr, &tailPtr, id, ticket, gender);    /* add passenger to queue */
+                printQueue(headPtr);                                 /* print the queue */
                 break;
             }
-            case 4:
-                if (!isEmpty(stackPtr)) {
-                    stackPtr = pop(stackPtr);   /* pop node from stack */
+
+            case 4:                                         /* dequeue */
+                if (!isEmpty(headPtr)) {
+                    dequeue(&headPtr, &tailPtr);            /* remove passenger from queue */
+                } else {
+                    puts("No passengers on board.");
                 }
-                printStack(stackPtr);           /* print the current stack nodes */
+                printQueue(headPtr);                        /* print the current queue */
                 break;
-            case 5:
-                printStack(stackPtr);           /* print the stack */
+
+            case 5:                                         /* print queue */
+                printQueue(headPtr);
                 break;
-            case 6: {
+
+            case 6: {                                       /* search */
                 char searchKey[20];
 
-                printf("Enter search-key (Passenger ID): ");
+                printf("Enter Passenger ID: ");
                 while (1) {
                     if (!fgets(searchKey, sizeof(searchKey), stdin)) {
-                        printf("Input error. Enter search-key (Passenger ID): ");
+                        printf("Input error. Enter Passenger ID: ");
                         continue;
                     }
-                    searchKey[strcspn(searchKey, "\n")] = '\0';   /* remove newline */
+                    if (searchKey[strlen(searchKey) - 1] == '\n')
+                        searchKey[strlen(searchKey) - 1] = '\0';  /* remove newline */
                     if (strlen(searchKey) == 0) {
-                        printf("Search key cannot be empty. Enter search-key (Passenger ID): ");
+                        printf("Passenger ID cannot be empty. Enter Passenger ID: ");
                         continue;
                     }
                     break;
                 }
 
-                searchOfStack(stackPtr, searchKey);           /* search the stack */
+                searchQueue(headPtr, searchKey);            /* search the queue */
                 break;
             }
+
             default:
-                printf("Invalid choice.\n\n");
+                printf("Invalid option.\n\n");
                 break;
         }
         instructions();
         printf("? ");
         fgets(inputBuf, sizeof(inputBuf), stdin);
-        choice = (int)strtol(inputBuf, NULL, 10);
+        choice = (unsigned int)strtoul(inputBuf, NULL, 10);
     }
 
-    printf("End of run.\n");
+    printf("Application Closed\n");
 
 }
