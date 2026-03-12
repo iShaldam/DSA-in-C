@@ -29,6 +29,16 @@ void         instructions(void);
 
 // Add node to top of stack
 StackNodePtr push(StackNodePtr topPtr, const char *id, unsigned int ticket, char gender) {
+    // Reject duplicate passenger IDs
+    StackNodePtr scanPtr = topPtr;
+    while (scanPtr != NULL) {
+        if (strcmp(scanPtr->passengerId, id) == 0) {
+            printf("Passenger ID %s already exists. Duplicate IDs are not allowed.\n", id);
+            return topPtr;
+        }
+        scanPtr = scanPtr->nextPtr;
+    }
+
     StackNodePtr newPtr = (StackNodePtr)malloc(sizeof(StackNode));
 
     if (newPtr != NULL) {
@@ -38,9 +48,9 @@ StackNodePtr push(StackNodePtr topPtr, const char *id, unsigned int ticket, char
         newPtr->passengerGender = gender;
         newPtr->nextPtr = topPtr;
         topPtr = newPtr;
-        printf("Passenger %s is boarding the train.\n", newPtr->passengerId); // print the passenger being pushed into stack (boarding the train)
+        printf("Passenger %s is boarding the train.\n", newPtr->passengerId);
     } else {
-        printf("Passenger %s not pushed. No memory available.\n", id); // if no memory available
+        printf("Passenger %s not pushed. No memory available.\n", id);
     }
 
     return topPtr;
@@ -131,6 +141,7 @@ void searchOfStack(StackNodePtr topPtr, const char *key) {
 
 // Print menu options
 void instructions(void) {
+    printf("\nSTACK OPERATIONS\n");
     printf("Enter choice:\n");
     printf("1) Print the last to board (top-of-stack)\n");
     printf("2) Print the first to board (bottom-of-stack)\n");
