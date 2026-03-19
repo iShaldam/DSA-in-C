@@ -48,6 +48,10 @@ int main (void) {
                         printf("Invalid input. Enter a valid Ticket Number: ");
                         continue;
                     }
+                    if (isDuplicateTicket(rootPtr, ticket)) {
+                        printf("Ticket Number %u already exists. Enter a different Ticket Number: ", ticket);
+                        continue;
+                    }
                     break;
                 }
 

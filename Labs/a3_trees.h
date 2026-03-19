@@ -45,14 +45,22 @@ void insertNode(TreeNodePtr *treePtr, const char *id, unsigned int ticket, char 
       return; 
    }
    else{ 
-      if ( strcmp(id, (*treePtr)->passengerId) < 0 ) { 	/* insert node in left subtree */
-         insertNode(&((*treePtr)->leftPtr),id, ticket, gender); 
-      } 
-      else if (strcmp(id, (*treePtr)->passengerId) > 0) {       /* insert into right subtree*/       
-         insertNode(&((*treePtr)->rightPtr),id, ticket, gender);
+      int idCmp = strcmp(id, (*treePtr)->passengerId);
+      if (idCmp < 0) {  /* insert node in left subtree */
+         insertNode(&((*treePtr)->leftPtr), id, ticket, gender);
+      } else if (idCmp > 0) { /* insert into right subtree */
+         insertNode(&((*treePtr)->rightPtr), id, ticket, gender);
       } else {
-      	printf("Passenger ID %s already exists. Duplicate IDs are not allowed.\n", id);
-	  }
+         // Same passengerId: allow multiple trips by ordering on ticketNumber.
+         if (ticket < (*treePtr)->ticketNumber) {
+            insertNode(&((*treePtr)->leftPtr), id, ticket, gender);
+         } else if (ticket > (*treePtr)->ticketNumber) {
+            insertNode(&((*treePtr)->rightPtr), id, ticket, gender);
+         } else {
+            // Exact duplicate (same passengerId + same ticketNumber) is not allowed.
+            printf("Passenger ID %s with Ticket Number %u already exists.\n", id, ticket);
+         }
+      }
   }
 } // end insertNode
 
@@ -93,6 +101,19 @@ void postOrder(TreeNodePtr treePtr)
 
 int isEmpty(TreeNodePtr treePtr) {
 	return (treePtr == NULL);
+}
+
+// Returns 1 if ticket number already exists in the BST, 0 otherwise.
+// Note: BST is ordered by passengerId, so we must traverse to find ticket duplicates.
+int isDuplicateTicket(TreeNodePtr treePtr, unsigned int ticket) {
+    if (treePtr == NULL) {
+        return 0;
+    }
+    if (treePtr->ticketNumber == ticket) {
+        return 1;
+    }
+    return isDuplicateTicket(treePtr->leftPtr, ticket) ||
+           isDuplicateTicket(treePtr->rightPtr, ticket);
 }
 
 // Search for a passenger by ID in the BST.
