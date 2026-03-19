@@ -1,0 +1,21 @@
+# IDE
+.vscode/
+
+# Common C/C++ build artifacts
+*.o
+*.obj
+*.a
+*.so
+*.dylib
+*.dll
+*.exe
+*.out
+a.out
+
+build/
+dist/
+out/
+target/
+
+# Logs
+*.log
