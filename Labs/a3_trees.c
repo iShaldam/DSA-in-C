@@ -75,11 +75,53 @@ int main (void) {
                 inOrder(rootPtr);
                 break;
             }
-    			break;
-    		case 2: // exit passengers
-    			break;
-    		case 3: // search passengers
-    			break;
+    		case 2: { // exit passenger
+                char id[20];
+                printf("Enter Passenger ID to exit: ");
+                while (1) {
+                    if (!fgets(id, sizeof(id), stdin)) {
+                        printf("Input error. Enter Passenger ID to exit: ");
+                        continue;
+                    }
+                    if (id[strlen(id) - 1] == '\n')
+                        id[strlen(id) - 1] = '\0';          /* remove newline left by fgets */
+                    if (strlen(id) == 0) {
+                        printf("Passenger ID cannot be empty. Enter Passenger ID to exit: ");
+                        continue;
+                    }
+                    break;
+                }
+
+                deleteNode(&rootPtr, id);
+                inOrder(rootPtr); // show updated list
+                break;
+            }
+    		case 3: { // find passenger
+                char id[20];
+                printf("Enter Passenger ID to find: ");
+                while (1) {
+                    if (!fgets(id, sizeof(id), stdin)) {
+                        printf("Input error. Enter Passenger ID to find: ");
+                        continue;
+                    }
+                    if (id[strlen(id) - 1] == '\n')
+                        id[strlen(id) - 1] = '\0';          /* remove newline left by fgets */
+                    if (strlen(id) == 0) {
+                        printf("Passenger ID cannot be empty. Enter Passenger ID to find: ");
+                        continue;
+                    }
+                    break;
+                }
+
+                TreeNodePtr foundPtr = searchNode(rootPtr, id);
+                if (foundPtr != NULL) {
+                    printf("Passenger details: Passenger ID: %s, Ticket Number: %u, Gender: %c\n",
+                           foundPtr->passengerId, foundPtr->ticketNumber, foundPtr->passengerGender);
+                } else {
+                    printf("No passenger found with ID %s.\n", id);
+                }
+                break;
+            }
     		case 4: // pre-order
     			preOrder(rootPtr);
     			break;

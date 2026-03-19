@@ -16,8 +16,8 @@ typedef struct treeNode * TreeNodePtr;
 
 /* Function Prototypes */
 void insertNode(TreeNodePtr *treePtr, const char *id, unsigned int ticket, char gender);
-//removeNode();
-//searchTree();
+TreeNodePtr searchNode(TreeNodePtr treePtr, const char *id);
+void deleteNode(TreeNodePtr *treePtr, const char *id);
 void inOrder(TreeNodePtr treePtr);
 void preOrder(TreeNodePtr treePtr);
 void postOrder(TreeNodePtr treePtr);
@@ -30,7 +30,7 @@ int isEmpty(TreeNodePtr treePtr);
 void insertNode(TreeNodePtr *treePtr, const char *id, unsigned int ticket, char gender)
 { 
    if(*treePtr == NULL){	
-      *treePtr = malloc(sizeof(TreeNode));
+      *treePtr = (TreeNodePtr)malloc(sizeof(TreeNode));
       if ( *treePtr != NULL) { 
         strncpy((*treePtr)->passengerId, id, 19);
          (*treePtr)->passengerId[19] = '\0';
@@ -40,7 +40,7 @@ void insertNode(TreeNodePtr *treePtr, const char *id, unsigned int ticket, char 
          (*treePtr)->rightPtr = NULL;
       } 
       else {
-         puts("Passenger %s not added. No memory available.\n"); 
+         printf("Passenger %s not added. No memory available.\n", id);
       } 
       return; 
    }
@@ -95,12 +95,103 @@ int isEmpty(TreeNodePtr treePtr) {
 	return (treePtr == NULL);
 }
 
+// Search for a passenger by ID in the BST.
+TreeNodePtr searchNode(TreeNodePtr treePtr, const char *id)
+{
+   TreeNodePtr tempPtr = treePtr;
+   while (tempPtr != NULL) {
+      int cmp = strcmp(id, tempPtr->passengerId);
+      if (cmp == 0) {
+         return tempPtr;
+      }
+      if (cmp < 0) {
+         tempPtr = tempPtr->leftPtr;
+      } else {
+         tempPtr = tempPtr->rightPtr;
+      }
+   }
+   return NULL;
+}
+
+// Delete a passenger node by ID from the BST.
+// Logic is adapted from the week10 delete/search BST approach.
+void deleteNode(TreeNodePtr *treePtr, const char *id)
+{
+   TreeNodePtr parentPtr = NULL;
+   TreeNodePtr tempNodePtr = NULL;
+   TreeNodePtr currPtr = NULL;
+
+   if (*treePtr == NULL) {
+      printf("No passengers are currently on the list.\n");
+      return;
+   }
+
+   currPtr = *treePtr;
+   while (currPtr != NULL) {
+      int cmp = strcmp(id, currPtr->passengerId);
+      if (cmp == 0) {
+         tempNodePtr = currPtr;
+         break;
+      }
+      parentPtr = currPtr;
+      if (cmp < 0) {
+         currPtr = currPtr->leftPtr;
+      } else {
+         currPtr = currPtr->rightPtr;
+      }
+   }
+
+   if (tempNodePtr == NULL) {
+      printf("No passenger found with ID %s.\n", id);
+      return;
+   }
+
+   // If node has two children, replace it with its in-order successor.
+   if (tempNodePtr->leftPtr != NULL && tempNodePtr->rightPtr != NULL) {
+      TreeNodePtr succParentPtr = tempNodePtr;
+      TreeNodePtr replacementNodePtr = tempNodePtr->rightPtr;
+
+      while (replacementNodePtr->leftPtr != NULL) {
+         succParentPtr = replacementNodePtr;
+         replacementNodePtr = replacementNodePtr->leftPtr;
+      }
+
+      // Copy successor data into the node being deleted.
+      strncpy(tempNodePtr->passengerId, replacementNodePtr->passengerId, 19);
+      tempNodePtr->passengerId[19] = '\0';
+      tempNodePtr->ticketNumber = replacementNodePtr->ticketNumber;
+      tempNodePtr->passengerGender = replacementNodePtr->passengerGender;
+
+      // Delete the successor node (which has at most one child).
+      TreeNodePtr childPtr = replacementNodePtr->rightPtr;
+      if (succParentPtr->leftPtr == replacementNodePtr) {
+         succParentPtr->leftPtr = childPtr;
+      } else {
+         succParentPtr->rightPtr = childPtr;
+      }
+      free(replacementNodePtr);
+      return;
+   }
+
+   // Node has zero or one child.
+   TreeNodePtr childPtr = (tempNodePtr->leftPtr != NULL) ? tempNodePtr->leftPtr : tempNodePtr->rightPtr;
+   if (parentPtr == NULL) {
+      // Deleting the root node.
+      *treePtr = childPtr;
+   } else if (parentPtr->leftPtr == tempNodePtr) {
+      parentPtr->leftPtr = childPtr;
+   } else {
+      parentPtr->rightPtr = childPtr;
+   }
+   free(tempNodePtr);
+}
+
 // Print menu
 void instructions(void) {
     printf("Enter choice:\n");
     printf("1) Board passenger\n");
-    printf("2) Exit passenger\n"); // not done
-    printf("3) Search passengers\n"); // not done
+    printf("2) Exit passenger\n");
+    printf("3) Find passenger\n");
     printf("4) Show passengers pre-order\n"); // rewrite
     printf("5) Show passengers post-order\n"); // rewrite
     printf("6) Show passengers in-order by ID\n");
