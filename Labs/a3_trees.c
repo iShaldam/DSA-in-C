@@ -1,0 +1,106 @@
+#include "a3_trees.h"
+
+int main (void) {
+	
+	TreeNodePtr rootPtr = NULL;
+	
+	unsigned int choice;
+    char inputBuf[10];              /* buffer for reading menu choice via fgets */
+
+    instructions();
+    printf("? ");
+    fgets(inputBuf, sizeof(inputBuf), stdin);
+    choice = (unsigned int)strtoul(inputBuf, NULL, 10);
+    
+    while (choice != 7){
+    	switch (choice) {
+    		case 1: { // board passengers
+    			char         id[20];
+                char         ticketBuf[20];
+                char         genderBuf[5];
+                unsigned int ticket;
+                char         gender;
+
+                printf("Enter Passenger ID: ");
+                while (1) {
+                    if (!fgets(id, sizeof(id), stdin)) {
+                        printf("Input error. Enter Passenger ID: ");
+                        continue;
+                    }
+                    if (id[strlen(id) - 1] == '\n')
+                        id[strlen(id) - 1] = '\0';          /* remove newline left by fgets */
+                    if (strlen(id) == 0) {
+                        printf("Passenger ID cannot be empty. Enter Passenger ID: ");
+                        continue;
+                    }
+                    break;
+                }
+
+                printf("Enter Ticket Number: ");
+                while (1) {
+                    if (!fgets(ticketBuf, sizeof(ticketBuf), stdin)) {
+                        printf("Input error. Enter Ticket Number: ");
+                        continue;
+                    }
+                    char *endptr;
+                    ticket = (unsigned int)strtoul(ticketBuf, &endptr, 10);
+                    if (endptr == ticketBuf || (*endptr != '\n' && *endptr != '\0')) {
+                        printf("Invalid input. Enter a valid Ticket Number: ");
+                        continue;
+                    }
+                    break;
+                }
+
+                while (1) {
+                    printf("Enter Gender (M/F): ");
+                    if (!fgets(genderBuf, sizeof(genderBuf), stdin)) {
+                        printf("Input error.");
+                        continue;
+                    }
+                    if (genderBuf[strlen(genderBuf) - 1] == '\n')
+                        genderBuf[strlen(genderBuf) - 1] = '\0'; /* remove newline left by fgets */
+
+                    if (genderBuf[0] == 'M' || genderBuf[0] == 'm') {
+                        gender = 'M';
+                        break;
+                    } else if (genderBuf[0] == 'F' || genderBuf[0] == 'f') {
+                        gender = 'F';
+                        break;
+                    } else {
+                        printf("Invalid gender. Please enter M or F.\n");
+                    }
+                }
+
+                insertNode(&rootPtr, id, ticket, gender);    /* add passenger to tree */
+                inOrder(rootPtr);
+                break;
+            }
+    			break;
+    		case 2: // exit passengers
+    			break;
+    		case 3: // search passengers
+    			break;
+    		case 4: // pre-order
+    			preOrder(rootPtr);
+    			break;
+    		case 5: // post-order
+    			postOrder(rootPtr);
+    			break;
+    		case 6: // in-order
+    			inOrder(rootPtr);
+    			break;
+    		default:
+    			printf("Invalid option.\n\n");
+    			break;
+    		} // end switch
+    		
+    	instructions();
+        printf("? ");
+        fgets(inputBuf, sizeof(inputBuf), stdin);
+        choice = (unsigned int)strtoul(inputBuf, NULL, 10);
+        
+    } // end while
+    
+    	printf("Exiting Application...\n");	
+    	
+} // end main
