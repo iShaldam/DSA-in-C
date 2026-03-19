@@ -186,14 +186,14 @@ void deleteNode(TreeNodePtr *treePtr, const char *id)
    free(tempNodePtr);
 }
 
-// Print menu
+/* Print menu */
 void instructions(void) {
-    printf("Enter choice:\n");
-    printf("1) Board passenger\n");
-    printf("2) Exit passenger\n");
-    printf("3) Find passenger\n");
-    printf("4) Show passengers pre-order\n"); // rewrite
-    printf("5) Show passengers post-order\n"); // rewrite
-    printf("6) Show passengers in-order by ID\n");
-    printf("7) Exit Application\n");
+   printf("Enter choice:\n");
+   printf("1) Board passenger\n");
+   printf("2) Exit passenger\n");
+   printf("3) Find passenger\n");
+   printf("4) View all passengers - starting from front of train\n");
+   printf("5) View all passengers - starting from back of train\n");
+   printf("6) View all passengers - sorted A to Z by ID\n");
+   printf("7) Exit Application\n");
 } // end menu
