@@ -45,22 +45,14 @@ void insertNode(TreeNodePtr *treePtr, const char *id, unsigned int ticket, char 
       return; 
    }
    else{ 
-      int idCmp = strcmp(id, (*treePtr)->passengerId);
-      if (idCmp < 0) {  /* insert node in left subtree */
-         insertNode(&((*treePtr)->leftPtr), id, ticket, gender);
-      } else if (idCmp > 0) { /* insert into right subtree */
-         insertNode(&((*treePtr)->rightPtr), id, ticket, gender);
+      if ( strcmp(id, (*treePtr)->passengerId) < 0 ) { 	/* insert node in left subtree */
+         insertNode(&((*treePtr)->leftPtr),id, ticket, gender); 
+      } 
+      else if (strcmp(id, (*treePtr)->passengerId) > 0) {       /* insert into right subtree*/       
+         insertNode(&((*treePtr)->rightPtr),id, ticket, gender);
       } else {
-         // Same passengerId: allow multiple trips by ordering on ticketNumber.
-         if (ticket < (*treePtr)->ticketNumber) {
-            insertNode(&((*treePtr)->leftPtr), id, ticket, gender);
-         } else if (ticket > (*treePtr)->ticketNumber) {
-            insertNode(&((*treePtr)->rightPtr), id, ticket, gender);
-         } else {
-            // Exact duplicate (same passengerId + same ticketNumber) is not allowed.
-            printf("Passenger ID %s with Ticket Number %u already exists.\n", id, ticket);
-         }
-      }
+      	printf("Passenger ID %s already exists. Duplicate IDs are not allowed.\n", id);
+	  }
   }
 } // end insertNode
 

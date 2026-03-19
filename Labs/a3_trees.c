@@ -33,6 +33,10 @@ int main (void) {
                         printf("Passenger ID cannot be empty. Enter Passenger ID: ");
                         continue;
                     }
+                    if (searchNode(rootPtr, id) != NULL) {
+                        printf("Passenger ID %s already exists. Enter a different Passenger ID: ", id);
+                        continue;
+                    }
                     break;
                 }
 
