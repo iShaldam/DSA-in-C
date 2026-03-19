@@ -131,12 +131,24 @@ int main (void) {
                 break;
             }
     		case 4: // pre-order
-    			preOrder(rootPtr);
+    			if(rootPtr == NULL) {
+    				printf("No passengers are currently on the train.\n");
+    				break;
+    			}
+                preOrder(rootPtr);
     			break;
     		case 5: // post-order
+    			if(rootPtr == NULL) {
+    				printf("No passengers are currently on the train.\n");
+    				break;
+    			}
     			postOrder(rootPtr);
     			break;
     		case 6: // in-order
+    			if(rootPtr == NULL) {
+    				printf("No passengers are currently on the train.\n");
+    				break;
+    			}
     			inOrder(rootPtr);
     			break;
     		default:
