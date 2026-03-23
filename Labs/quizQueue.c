@@ -4,7 +4,7 @@
 
 #include "quizQueue.h"
 
-int main(void) {
+void queueMenu(void) {
 
     QueueNodePtr headPtr = NULL;    /* pointer to front of queue */
     QueueNodePtr tailPtr = NULL;    /* pointer to back of queue */
@@ -12,7 +12,7 @@ int main(void) {
     unsigned int choice;
     char inputBuf[10];              /* buffer for reading menu choice via fgets */
 
-    instructions();
+    queueInstructions();
     printf("? ");
     fgets(inputBuf, sizeof(inputBuf), stdin);
     choice = (unsigned int)strtoul(inputBuf, NULL, 10);
@@ -20,7 +20,7 @@ int main(void) {
     while (choice != 7) {
         switch (choice) {
             case 1:                                         /* front of queue */
-                if (!isEmpty(headPtr)) {
+                if (!isQueueEmpty(headPtr)) {
                     front(headPtr);
                 } else {
                     puts("No passengers on board.");
@@ -28,7 +28,7 @@ int main(void) {
                 break;
 
             case 2:                                         /* back of queue */
-                if (!isEmpty(headPtr)) {
+                if (!isQueueEmpty(headPtr)) {
                     back(tailPtr);
                 } else {
                     puts("No passengers on board.");
@@ -54,7 +54,7 @@ int main(void) {
                         printf("Passenger ID cannot be empty. Enter Passenger ID: ");
                         continue;
                     }
-                    if (isDuplicate(headPtr, id)) {
+                    if (isDuplicateQueue(headPtr, id)) {
                         printf("Passenger ID %s already exists. Enter a different ID: ", id);
                         continue;
                     }
@@ -73,7 +73,7 @@ int main(void) {
                         printf("Invalid input. Enter a valid Ticket Number: ");
                         continue;
                     }
-                    if (isDuplicateTicket(headPtr, ticket)) {
+                    if (isDuplicateTicketQueue(headPtr, ticket)) {
                         printf("Ticket Number %u already exists. Enter a different Ticket Number: ", ticket);
                         continue;
                     }
@@ -106,7 +106,7 @@ int main(void) {
             }
 
             case 4:                                         /* dequeue */
-                if (!isEmpty(headPtr)) {
+                if (!isQueueEmpty(headPtr)) {
                     dequeue(&headPtr, &tailPtr);            /* remove passenger from queue */
                 } else {
                     puts("No passengers on board.");
@@ -144,12 +144,12 @@ int main(void) {
                 printf("Invalid option.\n\n");
                 break;
         }
-        instructions();
+        queueInstructions();
         printf("? ");
         fgets(inputBuf, sizeof(inputBuf), stdin);
         choice = (unsigned int)strtoul(inputBuf, NULL, 10);
     }
 
-    printf("Application Closed\n");
+    printf("Returning to main menu...\n");
 
 }

@@ -18,16 +18,17 @@ typedef struct stackNode  StackNode;
 typedef struct stackNode *StackNodePtr;
 
 // Function prototypes
-StackNodePtr push(StackNodePtr topPtr, const char *id, unsigned int ticket, char gender);
-StackNodePtr pop(StackNodePtr topPtr);
-int          isEmpty(StackNodePtr topPtr);
-void         topOfStack(StackNodePtr topPtr);
-void         bottomOfStack(StackNodePtr topPtr);
-void         printStack(StackNodePtr topPtr);
-void         searchOfStack(StackNodePtr topPtr, const char *key);
-void         instructions(void);
-int          isDuplicate(StackNodePtr topPtr, const char *id);
-int          isDuplicateTicket(StackNodePtr topPtr, unsigned int ticket);
+ StackNodePtr push(StackNodePtr topPtr, const char *id, unsigned int ticket, char gender);
+ StackNodePtr pop(StackNodePtr topPtr);
+ int          isStackEmpty(StackNodePtr topPtr);
+ void         topOfStack(StackNodePtr topPtr);
+ void         bottomOfStack(StackNodePtr topPtr);
+ void         printStack(StackNodePtr topPtr);
+ void         searchOfStack(StackNodePtr topPtr, const char *key);
+ void         stackInstructions(void);
+ int          isDuplicateStack(StackNodePtr topPtr, const char *id);
+ int          isDuplicateTicketStack(StackNodePtr topPtr, unsigned int ticket);
+ void         stackMenu(void);
 
 // Add node to top of stack
 StackNodePtr push(StackNodePtr topPtr, const char *id, unsigned int ticket, char gender) {
@@ -62,7 +63,7 @@ StackNodePtr pop(StackNodePtr topPtr) {
 }
 
 // Return 1 if stack is empty, 0 otherwise
-int isEmpty(StackNodePtr topPtr) {
+int isStackEmpty(StackNodePtr topPtr) {
     return (topPtr == NULL);
 }
 
@@ -132,7 +133,7 @@ void searchOfStack(StackNodePtr topPtr, const char *key) {
 }
 
 // Returns 1 if ticket number already exists in stack, 0 otherwise
-int isDuplicateTicket(StackNodePtr topPtr, unsigned int ticket) {
+int isDuplicateTicketStack(StackNodePtr topPtr, unsigned int ticket) {
     StackNodePtr currentPtr = topPtr;
 
     while (currentPtr != NULL) {
@@ -145,7 +146,7 @@ int isDuplicateTicket(StackNodePtr topPtr, unsigned int ticket) {
 }
 
 // Returns 1 if ID already exists in stack, 0 otherwise
-int isDuplicate(StackNodePtr topPtr, const char *id) {
+int isDuplicateStack(StackNodePtr topPtr, const char *id) {
     StackNodePtr currentPtr = topPtr;
 
     while (currentPtr != NULL) {
@@ -158,7 +159,7 @@ int isDuplicate(StackNodePtr topPtr, const char *id) {
 }
 
 // Print menu options
-void instructions(void) {
+void stackInstructions(void) {
     printf("Enter choice:\n");
     printf("1) Print the last to board\n");
     printf("2) Print the first to board\n");
@@ -166,7 +167,7 @@ void instructions(void) {
     printf("4) Exit passenger\n");
     printf("5) Print all passengers on train\n");
     printf("6) Search passengers\n");
-    printf("7) Exit Application\n");
+    printf("7) Return to main menu\n");
 }
 
 #endif /* QUIZSTACK_H */

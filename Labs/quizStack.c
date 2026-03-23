@@ -5,14 +5,14 @@
 // include stack header-file
 #include "quizStack.h"
 
-int main(void) {
+void stackMenu(void) {
 
     StackNodePtr stackPtr = NULL;   /* create stack pointer */
 
     unsigned int choice;
     char inputBuf[10];              /* buffer for reading menu choice via fgets */
 
-    instructions();
+    stackInstructions();
     printf("? ");
     fgets(inputBuf, sizeof(inputBuf), stdin);
     choice = (int)strtol(inputBuf, NULL, 10);
@@ -20,7 +20,7 @@ int main(void) {
     while (choice != 7) {
         switch (choice) {
             case 1:
-                if (!isEmpty(stackPtr)) {
+                if (!isStackEmpty(stackPtr)) {
                     topOfStack(stackPtr);   /* print node at the top of the stack */
                 } else {
                     puts("There are no passengers on board.");
@@ -48,7 +48,7 @@ int main(void) {
                         printf("Passenger ID cannot be empty. Enter Passenger ID: ");
                         continue;
                     }
-                    if (isDuplicate(stackPtr, id)) {
+                    if (isDuplicateStack(stackPtr, id)) {
                         printf("Passenger ID %s already exists. Enter a different ID: ", id);
                         continue;
                     }
@@ -67,7 +67,7 @@ int main(void) {
                         printf("Invalid input. Enter a valid Ticket Number: ");
                         continue;
                     }
-                    if (isDuplicateTicket(stackPtr, ticket)) {
+                    if (isDuplicateTicketStack(stackPtr, ticket)) {
                         printf("Ticket Number %u already exists. Enter a different Ticket Number: ", ticket);
                         continue;
                     }
@@ -102,7 +102,7 @@ int main(void) {
                 break;
             }
             case 4:
-                if (!isEmpty(stackPtr)) {
+                if (!isStackEmpty(stackPtr)) {
                     stackPtr = pop(stackPtr);   /* pop node from stack */
                 }
                 printStack(stackPtr);           /* print the current stack nodes */
@@ -135,12 +135,12 @@ int main(void) {
                 printf("Invalid choice.\n\n");
                 break;
         }
-        instructions();
+        stackInstructions();
         printf("? ");
         fgets(inputBuf, sizeof(inputBuf), stdin);
         choice = (int)strtol(inputBuf, NULL, 10);
     }
 
-    printf("End of run.\n");
+    printf("Returning to main menu...\n");
 
 }

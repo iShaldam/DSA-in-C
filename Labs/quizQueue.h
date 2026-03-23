@@ -20,14 +20,15 @@ typedef struct queueNode *QueueNodePtr;
 // Function prototypes
 void enqueue(QueueNodePtr *headPtr, QueueNodePtr *tailPtr, const char *id, unsigned int ticket, char gender);
 void dequeue(QueueNodePtr *headPtr, QueueNodePtr *tailPtr);
-int  isEmpty(QueueNodePtr headPtr);
+int  isQueueEmpty(QueueNodePtr headPtr);
 void front(QueueNodePtr headPtr);
 void back(QueueNodePtr tailPtr);
 void printQueue(QueueNodePtr headPtr);
 void searchQueue(QueueNodePtr headPtr, const char *key);
-void instructions(void);
-int  isDuplicate(QueueNodePtr headPtr, const char *id);
-int  isDuplicateTicket(QueueNodePtr headPtr, unsigned int ticket);
+void queueInstructions(void);
+int  isDuplicateQueue(QueueNodePtr headPtr, const char *id);
+int  isDuplicateTicketQueue(QueueNodePtr headPtr, unsigned int ticket);
+void queueMenu(void);
 
 // Add passenger to the tail of the queue
 void enqueue(QueueNodePtr *headPtr, QueueNodePtr *tailPtr, const char *id, unsigned int ticket, char gender) {
@@ -62,7 +63,7 @@ void dequeue(QueueNodePtr *headPtr, QueueNodePtr *tailPtr) {
 
     *headPtr = (*headPtr)->nextPtr;
 
-    if (*headPtr == NULL) {                     //if queue is now empty, update tailPtr 
+    if (*headPtr == NULL) {                     //if queue is now empty, update tailPtr
         *tailPtr = NULL;
     }
 
@@ -70,7 +71,7 @@ void dequeue(QueueNodePtr *headPtr, QueueNodePtr *tailPtr) {
 }
 
 // Return 1 if queue is empty, 0 otherwise
-int isEmpty(QueueNodePtr headPtr) {
+int isQueueEmpty(QueueNodePtr headPtr) {
     return (headPtr == NULL);
 }
 
@@ -127,7 +128,7 @@ void searchQueue(QueueNodePtr headPtr, const char *key) {
 }
 
 // Returns 1 if ID already exists in queue, 0 otherwise
-int isDuplicate(QueueNodePtr headPtr, const char *id) {
+int isDuplicateQueue(QueueNodePtr headPtr, const char *id) {
     QueueNodePtr currentPtr = headPtr;
 
     while (currentPtr != NULL) {
@@ -140,7 +141,7 @@ int isDuplicate(QueueNodePtr headPtr, const char *id) {
 }
 
 // Returns 1 if ticket number already exists in queue, 0 otherwise
-int isDuplicateTicket(QueueNodePtr headPtr, unsigned int ticket) {
+int isDuplicateTicketQueue(QueueNodePtr headPtr, unsigned int ticket) {
     QueueNodePtr currentPtr = headPtr;
 
     while (currentPtr != NULL) {
@@ -153,7 +154,7 @@ int isDuplicateTicket(QueueNodePtr headPtr, unsigned int ticket) {
 }
 
 // Print menu options
-void instructions(void) {
+void queueInstructions(void) {
     printf("Enter choice:\n");
     printf("1) Print the passenger at the front of the train\n");
     printf("2) Print the passenger at the back of the train\n");
@@ -161,7 +162,7 @@ void instructions(void) {
     printf("4) Exit passenger\n");
     printf("5) Print all passengers on train\n");
     printf("6) Search passengers\n");
-    printf("7) Exit Train Passenger Application\n");
+    printf("7) Return to main menu\n");
 }
 
 #endif //QUIZQUEUE_H

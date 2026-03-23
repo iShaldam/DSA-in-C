@@ -1,17 +1,17 @@
-#include "a3_trees.h"
+#include "quizTree.h"
 
-int main (void) {
-	
+void treeMenu(void) {
+
 	TreeNodePtr rootPtr = NULL;
-	
+
 	unsigned int choice;
     char inputBuf[10];              /* buffer for reading menu choice via fgets */
 
-    instructions();
+    treeInstructions();
     printf("? ");
     fgets(inputBuf, sizeof(inputBuf), stdin);
     choice = (unsigned int)strtoul(inputBuf, NULL, 10);
-    
+
     while (choice != 7){
     	switch (choice) {
     		case 1: { // board passengers
@@ -33,7 +33,7 @@ int main (void) {
                         printf("Passenger ID cannot be empty. Enter Passenger ID: ");
                         continue;
                     }
-                    if (searchNode(rootPtr, id) != NULL) {
+                    if (binaryTreeSearch(rootPtr, id) != NULL) {
                         printf("Passenger ID %s already exists. Enter a different Passenger ID: ", id);
                         continue;
                     }
@@ -52,7 +52,7 @@ int main (void) {
                         printf("Invalid input. Enter a valid Ticket Number: ");
                         continue;
                     }
-                    if (isDuplicateTicket(rootPtr, ticket)) {
+                    if (isDuplicateTicketTree(rootPtr, ticket)) {
                         printf("Ticket Number %u already exists. Enter a different Ticket Number: ", ticket);
                         continue;
                     }
@@ -121,7 +121,7 @@ int main (void) {
                     break;
                 }
 
-                TreeNodePtr foundPtr = searchNode(rootPtr, id);
+                TreeNodePtr foundPtr = binaryTreeSearch(rootPtr, id);
                 if (foundPtr != NULL) {
                     printf("Passenger details: Passenger ID: %s, Ticket Number: %u, Gender: %c\n",
                            foundPtr->passengerId, foundPtr->ticketNumber, foundPtr->passengerGender);
@@ -155,14 +155,14 @@ int main (void) {
     			printf("Invalid option.\n\n");
     			break;
     		} // end switch
-    		
-    	instructions();
+
+    	treeInstructions();
         printf("? ");
         fgets(inputBuf, sizeof(inputBuf), stdin);
         choice = (unsigned int)strtoul(inputBuf, NULL, 10);
-        
+
     } // end while
-    
-    	printf("Exiting Application...\n");	
-    	
-} // end main
+
+    	printf("Returning to main menu...\n");
+
+} // end treeMenu
