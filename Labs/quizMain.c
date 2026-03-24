@@ -9,9 +9,9 @@ int main(void) {
     while (1) {
         printf("\nPASSENGERS ON A TRAIN\n");
         printf("Enter choice:\n");
-        printf("1) Train car passengers\n");
-        printf("2) Boarding line\n");
-        printf("3) Passenger registry\n");
+        printf("1) Stack -- last boarded, first to exit\n");
+        printf("2) Queue -- first boarded, first to exit\n");
+        printf("3) Tree  -- search passengers by ID\n");
         printf("4) Exit station\n");
         printf("? ");
         fgets(inputBuf, sizeof(inputBuf), stdin);
